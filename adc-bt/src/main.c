@@ -21,7 +21,7 @@
 #include <inttypes.h>
 #include <stddef.h>
 #include <stdint.h>
-
+#include <zephyr/drivers/gpio.h>
 
 static struct bt_le_adv_param *adv_param = BT_LE_ADV_PARAM(
 	(BT_LE_ADV_OPT_CONNECTABLE |
@@ -43,6 +43,9 @@ LOG_MODULE_REGISTER(Lesson4_Exercise2, LOG_LEVEL_INF);
 #define STACKSIZE 1024
 #define PRIORITY 7
 
+#define SW1_NODE	DT_ALIAS(sw1) 
+static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET(SW1_NODE, gpios);
+
 #define RUN_LED_BLINK_INTERVAL 1000
 /* STEP 17 - Define the interval at which you want to send data at */
 #define NOTIFY_INTERVAL         500
@@ -56,7 +59,18 @@ static const struct bt_data ad[] = {
 	BT_DATA(BT_DATA_NAME_COMPLETE, DEVICE_NAME, DEVICE_NAME_LEN),
 
 };
+int suunta = 1;
+void button_pressed(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+{
+	printk("nappia painettu");
+    if(suunta<5){
+		suunta++;
+	}else{
+		suunta=1;
+	}
 
+}
+static struct gpio_callback button_cb_data;
 static const struct bt_data sd[] = {
 	BT_DATA_BYTES(BT_DATA_UUID128_ALL, BT_UUID_LBS_VAL),
 };
@@ -79,10 +93,17 @@ void send_data_thread(void)
 	while(1){
 
 		struct Measurement m = readADCValue();
-		printk("x = %d,  y = %d,  z = %d\n",m.x,m.y,m.z);
-		/* Send notification, the function sends notifications only if a client is subscribed */
-		
-		for(int i=0;i<3;i++) {
+		bool val = gpio_pin_get_dt(&button);
+		if(val){
+			if(suunta<5){
+				suunta++;
+			}else{
+				suunta=1;
+			}
+		}
+				
+		for(int i=0;i<4;i++) {
+			
 			if (i==0){
 				app_sensor_value =  m.x;
 				my_lbs_send_sensor_notify(app_sensor_value);
@@ -98,9 +119,13 @@ void send_data_thread(void)
 				my_lbs_send_sensor_notify(app_sensor_value);
 				printk("z = %d\n",app_sensor_value);
 				
+			}else if(i==3){
+				app_sensor_value = suunta;
+				my_lbs_send_sensor_notify(app_sensor_value);
+				printk("suunta = %d\n",app_sensor_value);
 			}
 			
-			my_lbs_send_sensor_notify("1");
+			
 			
 		}
 		k_sleep(K_MSEC(NOTIFY_INTERVAL));
@@ -162,6 +187,7 @@ void main(void)
 {
 	int blink_status = 0;
 	int err;
+	int ret;
 
 	LOG_INF("Starting Lesson 4 - Exercise 2 \n");
 	
@@ -187,6 +213,13 @@ void main(void)
 	printk("ADC initialization failed!");
 	return;
 	}
+	if (!device_is_ready(button.port)) {
+		return;
+	}
+	ret = gpio_pin_configure_dt(&button, GPIO_INPUT);
+	if (ret < 0) {
+		return;
+	}
 	bt_conn_cb_register(&connection_callbacks);
 
 	err = my_lbs_init(&app_callbacks);
@@ -207,6 +240,13 @@ void main(void)
 		dk_set_led(RUN_STATUS_LED, (++blink_status) % 2);
 		k_sleep(K_MSEC(RUN_LED_BLINK_INTERVAL));
 	}
+	ret = gpio_pin_interrupt_configure_dt(&button, GPIO_INT_EDGE_TO_ACTIVE );
+
+	/* STEP 6 - Initialize the static struct gpio_callback variable   */
+    gpio_init_callback(&button_cb_data, button_pressed, BIT(button.pin)); 	
+	
+	/* STEP 7 - Add the callback function by calling gpio_add_callback()   */
+	 gpio_add_callback(button.port, &button_cb_data);
 }
 
 /* STEP 18.2 - Define and initialize a thread to send data periodically */

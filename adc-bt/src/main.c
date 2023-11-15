@@ -105,28 +105,26 @@ void send_data_thread(void)
 		for(int i=0;i<4;i++) {
 			
 			if (i==0){
-				app_sensor_value =  m.x;
-				my_lbs_send_sensor_notify(app_sensor_value);
-				printk("x = %d\n",app_sensor_value);
-				
-			}else if(i==1){
-				app_sensor_value = m.y;
-				my_lbs_send_sensor_notify(app_sensor_value);
-				printk("y = %d\n",app_sensor_value);
-				
-			}else if(i==2){
-				app_sensor_value = m.z;
-				my_lbs_send_sensor_notify(app_sensor_value);
-				printk("z = %d\n",app_sensor_value);
-				
-			}else if(i==3){
 				app_sensor_value = suunta;
 				my_lbs_send_sensor_notify(app_sensor_value);
 				printk("suunta = %d\n",app_sensor_value);
+								
+			}else if(i==1){
+				app_sensor_value =  m.x;
+				my_lbs_send_sensor_notify(app_sensor_value);
+				printk("x = %d\n",app_sensor_value);
+	
+			}else if(i==2){
+				app_sensor_value = m.y;
+				my_lbs_send_sensor_notify(app_sensor_value);
+				printk("y = %d\n",app_sensor_value);
+							
+			}else if(i==3){
+				app_sensor_value = m.z;
+				my_lbs_send_sensor_notify(app_sensor_value);
+				printk("z = %d\n",app_sensor_value);
 			}
-			
-			
-			
+					
 		}
 		k_sleep(K_MSEC(NOTIFY_INTERVAL));
 		

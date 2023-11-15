@@ -2,6 +2,11 @@ import asyncio
 from bleak import BleakScanner, BleakClient
 import struct
 
+direction_value = []
+x_values = []
+y_values = []
+z_values = []
+
 # Replace with your device's name and characteristic UUID
 device_name = "MY_LBS2"
 characteristic_uuid = "00001526-1212-efde-1523-785feabcd123"
@@ -25,11 +30,26 @@ async def connect_and_subscribe(device_address, characteristic_uuid):
                     target_characteristic = char
                     break
 
-        def notification_handler(sender: int, data: bytearray):
-            # Assuming the data is a 32-bit signed integer (little-endian)
+        def notification_handler(data: bytearray):            
+            global i
+
             decoded_value = struct.unpack('<i', data)[0]
-    
             print(f"Decimal value: {decoded_value}")
+
+            if decoded_value <= 5 and decoded_value > 0:
+                i = 0
+            else:
+                i = (i + 1) % 4
+
+            if i == 0:
+                direction_value.append(decoded_value)  
+            elif i == 1:
+                x_values.append(decoded_value) 
+            elif i == 2:
+                y_values.append(decoded_value) 
+            elif i == 3:
+                z_values.append(decoded_value)
+                
 
         await client.start_notify(target_characteristic.handle, notification_handler)
         await asyncio.sleep(30)  # Listen for notifications for 30 seconds

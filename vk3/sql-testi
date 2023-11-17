@@ -1,0 +1,48 @@
+import mysql.connector
+import csv
+from dotenv import load_dotenv
+import os
+
+
+load_dotenv()
+
+# nuitten on hyvä olla ympäristömuuttujia ettei jouvu vääriin käsiin
+DB_HOST = os.getenv("DB_HOST")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_DATABASE = os.getenv("DB_DATABASE")
+
+
+db_connection = mysql.connector.connect(
+    host=DB_HOST,
+    user=DB_USER,
+    password=DB_PASSWORD,
+    database=DB_DATABASE
+)
+
+
+db_cursor = db_connection.cursor()
+
+
+sql_query = "SELECT * FROM rawdata WHERE groupid = 10"
+db_cursor.execute(sql_query)
+
+
+results = db_cursor.fetchall()
+
+
+file_name = 'database_data.csv'
+with open(file_name, 'w', newline='') as csv_file:
+    csv_writer = csv.writer(csv_file)
+
+
+    csv_writer.writerow([i[0] for i in db_cursor.description])
+
+
+    csv_writer.writerows(results)
+
+print(f'Data retrieved and saved to file: {file_name}')
+
+
+db_cursor.close()
+db_connection.close()

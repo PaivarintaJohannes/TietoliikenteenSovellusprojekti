@@ -1,0 +1,26 @@
+import requests
+import csv
+
+
+palvelin_osoite = 'http://172.20.241.9/luedataa_kannasta_groupid_csv.php?groupid=10'
+
+
+response = requests.get(palvelin_osoite)
+
+
+if response.status_code == 200:
+
+    käsitelty_data = response.text
+
+
+    tiedostonimi = 'tallennettu_data.csv'
+    with open(tiedostonimi, 'w', newline='') as csv_tiedosto:
+        csv_writer = csv.writer(csv_tiedosto)
+        
+
+        for rivi in käsitelty_data.split('\n'):
+            csv_writer.writerow([rivi])
+        
+    print(f'Data tallennettu tiedostoon: {tiedostonimi}')
+else:
+    print(f'Virhe HTTP-pyynnössä. Statuskoodi: {response.status_code}')

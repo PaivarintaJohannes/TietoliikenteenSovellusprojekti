@@ -1,14 +1,21 @@
 import asyncio
+import os
 from bleak import BleakScanner, BleakClient
 import struct
 import mysql.connector
 from mysql.connector import errorcode
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Database connection setup
 try:
-    cnx = mysql.connector.connect(user='dbaccess_rw', password='fasdjkf2389vw2c3k234vk2f3',
-                                  host='172.20.241.9',
-                                  database='measurements')
+    cnx = mysql.connector.connect(
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        host=os.getenv("DB_HOST"),
+        database=os.getenv("DB_NAME")
+    )
 except mysql.connector.Error as err:
     if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
         print("Something is wrong with your user name or password")

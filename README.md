@@ -1,7 +1,7 @@
 TVT22SPL Tietoliikenteen sovellusprojekti. Päivärinta, Kokko
 
 # K-Means Algorithm
-
+![Kuva](https://github.com/PaivarintaJohannes/TietoliikenteenSovellusprojekti/blob/K-means/Kmeans/havainnollistus.png)
 ## Overview
 
 This script demonstrates the K-Means algorithm, used for grouping data points into K clusters. The algorithm iteratively refines cluster centers based on the average position of data points within each cluster.

@@ -3,16 +3,23 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
 ## Määritellään data yms
-data = np.loadtxt('putty.log')
-data = data.reshape(40, 3)
-numberOfRows = data.shape[0]
+data = np.genfromtxt('data.csv',delimiter=',')
+
+coordinates = np.zeros((250,3))
+
+direction_ids = data[:,0]
+coordinates = data[:,1:]
+
+numberOfRows = coordinates.shape[0]
 numberOfRows = int(numberOfRows)
-max_values = np.max(data, axis=0)
-k_centers = np.random.rand(4, 3) * max_values
-centerPointCumulativeSum = np.zeros((4,3))
-counts = np.zeros((1,4))
-new_centers = np.zeros((4,3))
-amountOfCenters = 4
+max_values = np.max(coordinates, axis=0)
+centerPointCumulativeSum = np.zeros((5,3))
+counts = np.zeros((1,5))
+new_centers = np.zeros((5,3))
+amountOfCenters = 5
+distances = np.zeros((1, 5))
+k_centers = coordinates[np.random.choice(numberOfRows, size=amountOfCenters, replace=False)]
+
 
 ##debuggaamiseen
 def debugPrints():
@@ -24,13 +31,16 @@ def debugPrints():
 
 def plottaus():
     fig = plt.figure()
+    colors = plt.cm.rainbow(direction_ids / direction_ids.max())
     ax = fig.add_subplot(111, projection='3d')
-    for i in range(4):
-        ax.scatter(new_centers[i,0],new_centers[i,1],new_centers[i,2], c='g', marker='o', label='Calculated Centers' if i == 0 else '')
-    for i in range(4):
-        ax.scatter(k_centers[i,0],k_centers[i,1],k_centers[i,2], c='b', marker='o',label='Random Points For The Algorithm' if i == 0 else '')
-    for i in range(40):
-        ax.scatter(data[i,0],data[i,1],data[i,2], c='r', marker='o', label='Data Points' if i == 0 else '')
+    for i in range(5):
+        ax.scatter(new_centers[i,0],new_centers[i,1],new_centers[i,2], c='black', marker='X', label='Calculated Centers' if i == 0 else '')
+    for i in range(5):
+        ax.scatter(k_centers[i,0],k_centers[i,1],k_centers[i,2], c='b', marker='o',label='Random Points' if i == 0 else '')
+    for direction_id in np.unique(direction_ids):
+        indices = direction_ids == direction_id
+        ax.scatter(coordinates[indices, 0], coordinates[indices, 1], coordinates[indices, 2], c=colors[indices],
+                   marker='o', label=f'Suunta id {int(direction_id)}')
     
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
@@ -39,8 +49,12 @@ def plottaus():
     plt.show()
 
 def calculateNewCenters():
-   for i in range(amountOfCenters):
-        new_centers[i, :] = centerPointCumulativeSum[i, :] / counts[0, i]  
+    for i in range(amountOfCenters):
+        if counts[0, i] != 0:
+            new_centers[i, :] = centerPointCumulativeSum[i, :] / counts[0, i]
+        else:          
+            new_centers[i, :] = k_centers[i, :]
+
 
 def checkZeros():
     if np.any(counts == 0): 
@@ -51,22 +65,24 @@ def checkZeros():
        calculateNewCenters()
 
 def kMeans():
-   for i in range(numberOfRows):
-    datapoint = data[i,:]
-    distances = np.zeros((1, 4))
-
-    for j in range(4):
-        distances[0, j] = np.linalg.norm(datapoint - k_centers[j,:])     
+    for i in range(numberOfRows):
+        datapoint = coordinates[i,:]
+        distances = np.zeros((1, 5))
+        for j in range(5):
+            distances[0, j] = np.linalg.norm(datapoint - k_centers[j,:])     
         winner = np.argmin(distances)
         centerPointCumulativeSum[winner,:] += datapoint
         counts[0,winner] += 1
-           
-for i in range(100):
-    kMeans()
     checkZeros()
+      
+
+for i in range(10):
+    kMeans()
     
 
 plottaus()
+print(new_centers)
+
 
   
 

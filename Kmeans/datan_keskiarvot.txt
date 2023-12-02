@@ -1,0 +1,25 @@
+Suunta 1: (vaaka ylös)
+Average x: 1479.14
+Average y: 1502.0
+Average z: 1788.46
+
+Suunta 2: (vaaka alas)
+Average x: 1457.53
+Average y: 1494.26
+Average z: 1199.17
+
+Suunta 3: (sivuttain x:n puol ylös)
+Average x: 1777.29
+Average y: 1474.37
+Average z: 1492.02
+
+Suunta 4: (alaspäin)
+Average x: 1487.36
+Average y: 1770.05
+Average z: 1468.34
+
+Suunta 5: (ylös)
+Average x: 1476.72
+Average y: 1177.06
+Average z: 1493.86
+

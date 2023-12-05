@@ -5,8 +5,9 @@ TVT22SPL Tietoliikenteen sovellusprojekti. Päivärinta, Kokko
 
 
 ## Saved center points
-Suunta1: X:1479 Y:1501 Z:1788 (vaaka ylös)
-Suunta2: X:1776 Y:1473 Z:1492 (vaaka alas)
-Suunta3: X:1456 Y:1493 Z:1198 (sivuttain x:n sivu ylös)
-Suunta4: X:1486 Y:1769 Z:1468 (alas)
-Suunta5: X:1476 Y:1176 Z:1494 (ylös)
+Suunta1_center: [1479.55357143 1501.71428571 1788.26785714] (Vaaka ylös)
+Suunta2_center: [1456.98214286 1493.66071429 1198.64285714] (Vaaka alas)
+Suunta3_center: [1776.75       1473.19642857 1492.35714286] (Sivuttain x ylös)
+Suunta4_center: [1185.71428571 1474.71428571 1500.08928571] (Sivuttain x alas)
+Suunta5_center: [1475.69642857 1176.69642857 1494.32142857] (Ylös)
+Suunta6_center: [1486.47272727 1769.94545455 1468.47272727] (Alas)

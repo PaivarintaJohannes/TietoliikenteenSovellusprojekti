@@ -29,26 +29,20 @@
 #define USER_BUTTON_3           DK_BTN3_MSK
 #define USER_BUTTON_4           DK_BTN4_MSK
 
-#define DEBUG 0  // 0 = changes direction when button 3 is pressed
-                 // 1 = fake 100 measurements done to each 6 directions when 3 pressed.
-static int direction = -1;	// 0 = x direction high
-							// 1 = x directon low	
-							// 2 = y direction high
-							// 3 = y direction low
-							// 4 = z direction high
-							// 5 = z direction low
+#define DEBUG 0 
+
+static int direction = -1; //alkuun -1 jotta suunta pitää ite alustaa
+
                 				 
 
 LOG_MODULE_REGISTER(MAIN, LOG_LEVEL_INF);
 
 static void button_changed(uint32_t button_state, uint32_t has_changed)
 {
-	//printk("button_state = %d\n",button_state);
-	//printk("has_changed = %d\n",has_changed);
+
 	if ((has_changed & USER_BUTTON_1) && (button_state & USER_BUTTON_1)) 
 	{
 		printk("Button 1 down\n");
-		//printConfusionMatrix();
 		struct Measurement m = readADCValue();
 		calculateDistanceToAllCentrePointsAndSelectWinner(m.x, m.y, m.z);
 	}
@@ -61,8 +55,7 @@ static void button_changed(uint32_t button_state, uint32_t has_changed)
 	}		
 	
 	if ((has_changed & USER_BUTTON_3) && (button_state & USER_BUTTON_3)) 
-	{
-		printk("Button 3 down, making fake 100 meas or one real meas depending on DEBUG state\n");
+	{	
 		#if DEBUG
 		direction = 0;
 		makeHundredFakeClassifications();
@@ -72,45 +65,45 @@ static void button_changed(uint32_t button_state, uint32_t has_changed)
 		switch (direction)
 		{
 		case 0:
-			printk("Direction is now set x = high\n");
+			printk("Suunta on nyt vaakataso +z (1)\n");
 			break;
 		case 1:
-			printk("Direction is now set x = low\n");
+			printk("Suunta on nyt vaakataso -z (2)\n");
 			break;
 		case 2:
-			printk("Direction is now set y = high\n");
+			printk("Suunta on nyt sivuttain +x (3)\n");
 			break;
 		case 3:
-			printk("Direction is now set y = low\n");
+			printk("Suunta on nyt sivuttain -x (4)\n");
 			break;
 		case 4:
-			printk("Direction is now set z = high\n");
+			printk("Suunta on nyt ylös -y (5)\n");
 			break;
 		case 5:
-			printk("Direction is now set z = low\n");
+			printk("Suunta on nyt alas +y (6)\n");
 			break;
 		
 		default:
 		    printk("Wrong direction set!!!\n");
 			break;
-		}
-
-		struct Measurement m = readADCValue();
-		//printk("x = %d,  y = %d,  z = %d\n",m.x,m.y,m.z);
+		}		
 		#endif
 	}		
 
-	if ((has_changed & USER_BUTTON_4) && (button_state & USER_BUTTON_4)) 
+	if ((has_changed & USER_BUTTON_4) && (button_state & USER_BUTTON_4))
 	{
-		printk("button 4 down, one meas and classification with current direction =%d\n",direction);
-		makeOneClassificationAndUpdateConfusionMatrix(direction);
-		printConfusionMatrix();
-	}		
+		if(direction < 0){
+			printk("Määritä suunta ensin painamlla button3!\n"); //jottei zephyr kaatuis
+		}else{
+			makeOneClassificationAndUpdateConfusionMatrix(direction);
+		}
+		
+	}
 }
 
 
-void main(void)
-{
+void main(void)	//init ledit ja adc 
+{	
 	int err;
 	err = dk_leds_init();
 	if (err) {
@@ -133,10 +126,15 @@ void main(void)
 
 	while (1) 
 	{
-		struct Measurement m = readADCValue();
-	//	printk("x = %d,  y = %d,  z = %d\n",m.x,m.y,m.z);
-		calculateDistanceToAllCentrePointsAndSelectWinner(m.x, m.y, m.z);
+		// ota seuraavat kommentit pois jos haluat että laite mittaa jatkuvasti ja luokittelee suunnan
+
+		// struct Measurement m = readADCValue();
+		// printk("x = %d,  y = %d,  z = %d\n",m.x,m.y,m.z);
+		// calculateDistanceToAllCentrePointsAndSelectWinner(m.x, m.y, m.z);
 		
+		
+		// vaiha sleep-aikoja jos haluat nopeampaa mittausta tms.
+
 		k_sleep(K_MSEC(1000));
 		
 		dk_set_led_on(USER_LED1);

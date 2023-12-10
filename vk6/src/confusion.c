@@ -56,50 +56,49 @@ void printConfusionMatrix(void)
 	}
 }
 
+//debuggaamista varten feikkimittauksia
 void makeHundredFakeClassifications(void)
 {
-   resetConfusionMatrix(); // Reset the confusion matrix before starting
+   resetConfusionMatrix();
 
    for (int i = 0; i < 100; i++)
    {
       for (int actualClass = 1; actualClass <= 6; actualClass++)
       {
-         // Use the corresponding row from measurements as the sensor data
          int x = measurements[actualClass - 1][0];
          int y = measurements[actualClass - 1][1];
          int z = measurements[actualClass - 1][2];
 
-        // Update the confusion matrix directly based on the actual class
          CM[actualClass - 1][actualClass - 1]++;
       }
    }
-
-// Print or analyze the confusion matrix as needed
 printConfusionMatrix();
 }
 
+//otetaan yks mittaus ja valitaan voittaja. sitte päivitetään cm
 void makeOneClassificationAndUpdateConfusionMatrix(int direction)
 {
-   /**************************************
-   Tee toteutus tälle ja voit tietysti muuttaa tämän aliohjelman sellaiseksi,
-   että se tekee esim 100 kpl mittauksia tai sitten niin, että tätä funktiota
-   kutsutaan 100 kertaa yhden mittauksen ja sen luokittelun tekemiseksi.
-   **************************************/
-   printk("Make your own implementation for this function if you need this\n");
+    struct Measurement m = readADCValue();
+    int result = calculateDistanceToAllCentrePointsAndSelectWinner(m.x, m.y, m.z);
+    CM[direction][result-1]++;
+    printk("Actual Direction: Suunta %d\n", direction+1);
+    printk("Classified as: Suunta %d\n", result);
+    printConfusionMatrix();
 }
 
 int calculateDistanceToAllCentrePointsAndSelectWinner(int x,int y,int z)
 {
     float distances[6];
-
-    // Calculate distances to each center point
+    
+    // Lasketaan etäisyydet kaikkiin keskipisteisiin
     distances[0] = sqrt(pow(x - Suunta1_center[0], 2) + pow(y - Suunta1_center[1], 2) + pow(z - Suunta1_center[2], 2));
     distances[1] = sqrt(pow(x - Suunta2_center[0], 2) + pow(y - Suunta2_center[1], 2) + pow(z - Suunta2_center[2], 2));
     distances[2] = sqrt(pow(x - Suunta3_center[0], 2) + pow(y - Suunta3_center[1], 2) + pow(z - Suunta3_center[2], 2));
     distances[3] = sqrt(pow(x - Suunta4_center[0], 2) + pow(y - Suunta4_center[1], 2) + pow(z - Suunta4_center[2], 2));
     distances[4] = sqrt(pow(x - Suunta5_center[0], 2) + pow(y - Suunta5_center[1], 2) + pow(z - Suunta5_center[2], 2));
     distances[5] = sqrt(pow(x - Suunta6_center[0], 2) + pow(y - Suunta6_center[1], 2) + pow(z - Suunta6_center[2], 2));
-  
+   
+   //Sitte valitaan lyhyin etäisyys ja sille kuuluva keskipiste
     int minIndex = 0;
     for (int i = 1; i < 6; i++)
     {
@@ -108,9 +107,8 @@ int calculateDistanceToAllCentrePointsAndSelectWinner(int x,int y,int z)
             minIndex = i;
         }
     }
-    int result = minIndex + 1;
-    
-    
+   //printataan keskipisteen suunta   
+    int result = minIndex + 1; 
     		switch (result)
 		{
 		case 1:

@@ -3,6 +3,9 @@ TVT22SPL Tietoliikenteen sovellusprojekti. Päivärinta, Kokko
 # K-Means Algorithm
 ![Havainnollistus](https://github.com/PaivarintaJohannes/TietoliikenteenSovellusprojekti/blob/K-means/Kmeans/havainnollistus.png)
 
+# Toimiva confusion matrix
+![cm](https://github.com/PaivarintaJohannes/TietoliikenteenSovellusprojekti/blob/K-means/CM.png)
+
 
 ## Saved center points
 Suunta1_center: [1479.55357143 1501.71428571 1788.26785714] (Vaaka ylös)

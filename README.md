@@ -10,4 +10,4 @@
 
 ![Arkkitehtuurikaavio](https://github.com/PaivarintaJohannes/TietoliikenteenSovellusprojekti/blob/main/arkkitehtuurikaavio.png)
 
-Repossa myös muita projektin kannalta tärkeitä brancheja, käytännöb syistä ei liitetty mainiin. Kannattaa tsekata.
+HUOM. Repossa myös muita projektin kannalta tärkeitä brancheja, käytännön syistä ei liitetty mainiin. Kannattaa tsekata.

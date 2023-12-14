@@ -35,8 +35,7 @@ Ohjelma koostuu siis datan ja muuttujien määrittelystä sekä eri funktioista.
 Lopuksi tehtiin ohjelma joka mittaa kMeans algoritmin suorituskyvyn, eli kuinka hyvin satunnaiset anturidatan arvot luokitellaan. Ohjelmaan includattiin keskipiste-data ja luotiin confusion matrix.
 Ohjelma lukee anturidataa jatkuvasti taustalla. Nordicin nappeja painamalla voi A. Määrittää laitteen nykyisen aidon suunnan ja B. tehdä yhden luokituksen anturidatan perusteella ja päivittää confusion matrixia. Jokaisen luokituksen jälkeen ohjelma printtaa confusion matrixin. Alhaalla kuvassa näkyy matriisi, johon testattiin jokainen suunta. Kuten kuvassa näkyy, luokitukset toimivat oikein, vaikkakin niitä on tehty vain 1kpl per luokka. Halutessaan ohjelman voi muuttaa printtaamaan jatkuvasti kiihtyvyysanturin suuntaa (vaakataso, ylös, alas jne.) 
 
-
-
+![CM](https://github.com/PaivarintaJohannes/TietoliikenteenSovellusprojekti/blob/main/matriisi.png)
 
 ![luokittelu](https://github.com/PaivarintaJohannes/TietoliikenteenSovellusprojekti/blob/main/funktioita.png)
 

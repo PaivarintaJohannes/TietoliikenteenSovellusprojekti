@@ -1,3 +1,6 @@
+vk3 ja vk4 linux-tehtäviä.
+
+
 Tässä firewall.sh skripti linux palvelimella:
 
 

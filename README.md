@@ -38,5 +38,5 @@ Ohjelma lukee anturidataa jatkuvasti taustalla. Nordicin nappeja painamalla voi 
 
 
 
-
+![luokittelu](https://github.com/PaivarintaJohannes/TietoliikenteenSovellusprojekti/blob/main/funktioita.png)
 

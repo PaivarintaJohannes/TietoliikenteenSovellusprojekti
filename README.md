@@ -21,6 +21,8 @@ Alhaalla kuvassa näkyvä app_sensor_value siis lähetetään reaaliaikaisesti s
 Raspberrylle kirjoitettiin ohjelma joka luo Bt-yhteyhden ennalta määritetyillä osoitteilla nordicin alustaan, joka pyörittää ylempänä mainittua ohjelmaa. Ohjelman käynnistyessä se vastaanottaa tietyn määrän arvoja ja tallettaa ne taulukoihin.
 Kun arvot on talletettu taulukoihin, ne lähetetään verkon yli mysql.connector-kirjaston avulla tietokantaan. Tietokantaan lähettäminen vaati tunnukset, salasanat sekä osoitteet. Nämä laitettiin dotenv-tiedostoon (jota ei sisällytetty tietenkään githubiin). Lähetettävä data koostuu ryhmäid:stä (jotta jokaisen ryhmän oma data erottuu joukosta) ja suunta- sekä x,y,z-arvoista.
 
+![databasekoodi](https://github.com/PaivarintaJohannes/TietoliikenteenSovellusprojekti/blob/main/database.png)
+
 HUOM. Repossa myös muita projektin kannalta tärkeitä brancheja, käytännön syistä ei liitetty mainiin. Kannattaa tsekata.
 
 

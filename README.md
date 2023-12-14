@@ -23,6 +23,13 @@ Kun arvot on talletettu taulukoihin, ne lähetetään verkon yli mysql.connector
 
 ![databasekoodi](https://github.com/PaivarintaJohannes/TietoliikenteenSovellusprojekti/blob/main/database.png)
 
+## 3. Datan haku tietokannasta ja K-Means algoritmi
+
+Data haettiin tietokannasta oman ryhmäid:n avulla yksinkertaisella soketti-skriptillä pythonilla. Data valmisteltiin haluttuun muotoon pandas-kirjaston avulla. Itse K-Means-ohjelma tuottikin enemmän työtä - paljolti debuggaamista. Ohjelman tarkoitus on lukea koko anturidata csv-tiedostosta ja ajaa ne algoritmin läpi. Algoritmi tuottaa datan keskipisteet jokaiselle klusterille. Näiden keskipisteiden avulla voidaan sitten jatkossa luokitella kaikki kiihtyvyysanturin arvot kuuteen eri klusteriin. 
+Ohjelma koostuu siis datan ja muuttujien määrittelystä sekä eri funktioista. Itse Kmeans-funktio käy läpi jokaisen datapisteen ja laskee kunkin etäisyyden kuuteen eri generoituun alkukeskipisteeseen ja valitsee sen pisteen, johon oli lyhyin etäisyys. Jokaiselle tämmöiselle "voittajalle" annetaan yksi countti per datapiste. Myöhemmissä funktioissa keskipisteiden datapointit summataan yhteen ja jaetaan counttien määrällä. Jos jokin keskipiste ei saanut yhtään "voittoa", tälle arvotaan uudet koordinaatit. Tällä tavoin datalle löytyy oikeat keskipisteet. Lopuski tulosta visualisoidaan plottaamalla data, ja algoritmin tuottamat keskipisteet.
+
+
+
 HUOM. Repossa myös muita projektin kannalta tärkeitä brancheja, käytännön syistä ei liitetty mainiin. Kannattaa tsekata.
 
 
